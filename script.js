@@ -9,18 +9,25 @@
   const preloader = document.getElementById('preloader');
   if (!preloader) return;
 
+  let hidden = false;
   const hide = () => {
+    if (hidden) return;
+    hidden = true;
     preloader.classList.add('hidden');
     document.body.style.overflow = '';
   };
 
   document.body.style.overflow = 'hidden';
 
-  if (document.readyState === 'complete') {
-    setTimeout(hide, 300);
+  // Скрываем после DOMContentLoaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(hide, 400));
   } else {
-    window.addEventListener('load', () => setTimeout(hide, 400));
+    setTimeout(hide, 200);
   }
+
+  // Принудительный таймаут — скрываем через 2 секунды в любом случае
+  setTimeout(hide, 2000);
 })();
 
 
@@ -84,6 +91,30 @@
   });
 })();
 
+
+/* ===== SCROLL BUTTONS ===== */
+(function () {
+  const btnTop    = document.getElementById('scrollTop');
+  const btnBottom = document.getElementById('scrollBottom');
+  if (!btnTop || !btnBottom) return;
+
+  const update = () => {
+    const scrolled  = window.scrollY;
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    btnTop.classList.toggle('visible', scrolled > 300);
+    btnBottom.classList.toggle('visible', scrolled < maxScroll - 200);
+  };
+
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+window.scrollToTop = function () {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+window.scrollToBottom = function () {
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+};
 
 /* ===== FLOAT BUTTONS ===== */
 (function () {

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /premier.html
+Disallow: /premier.js
+
+Sitemap: https://ecopotolkispb.ru/sitemap.xml
